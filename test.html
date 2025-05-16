@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Calculator</title>
+        <style>
+            @keyframes animation {
+                from {height:30px;}
+                to {height:100px;}
+            }
+            #calc {
+                display:grid;
+                grid-template-areas:"bar bar bar bar""one two three plus""four five six minus""seven eight nine mul""noval noval decimal divide""solve solve clear clear";
+                grid-template-columns:1fr 1fr 1fr 1fr;
+                gap:5px;
+                border:2px solid black;
+                border-radius:10px;
+                width:300px;
+                height:500px;
+                padding:10px;
+            }
+            .buttons {
+                background-color:#ccccd1;
+                border:none;
+                transition:background 0.2s;
+            }
+            .buttons:hover {
+                cursor:pointer;
+                background-color:#bdbdbf;
+            }
+            .buttons:active {
+                background-color:white;
+                transition:background 0.1s;
+            }
+            #screen {
+                grid-area:bar;
+                border:none;
+                border-bottom:2px solid black;
+                font-family:monospace;
+                font-size:20px;
+            }
+            #screen:hover {cursor:default;}
+            #screen:focus {outline:none;}
+            #plus {grid-area:plus;}
+            #minus {grid-area:minus;}
+            #mul {grid-area:mul;}
+            #divide {grid-area:divide;}
+            #zero {grid-area:noval;}
+            #solve {
+                grid-area:solve;
+                background-color:#04a96d;
+                border:none;
+                transition:background 0.2s;
+            }
+            #solve:hover {
+                background-color:#058455;
+                cursor:pointer;
+            }
+            #clear {
+                grid-area:clear;
+                background-color:#bf0b0b;
+                border:none;
+                transition:background 0.2s;
+            }
+            #clear:hover {
+                cursor:pointer;
+                background-color:#820303;
+            }
+            #solve:active,
+            #clear:active {
+                background-color:white;
+                transition:background 0.1s;
+            }
+            #decimal {
+                font-size:20px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="calc">
+            <input type="text" id="screen" readonly>
+            <button onclick="dis('1')" id="one" class="buttons">1</button>
+            <button onclick="dis('2')" id="two" class="buttons">2</button>
+            <button onclick="dis('3')" id="three" class="buttons">3</button>
+            <button onclick="dis('4')" id="four" class="buttons">4</button>
+            <button onclick="dis('5')" id="five" class="buttons">5</button>
+            <button onclick="dis('6')" id="six" class="buttons">6</button>
+            <button onclick="dis('7')" id="seven" class="buttons">7</button>
+            <button onclick="dis('8')" id="eight" class="buttons">8</button>
+            <button onclick="dis('9')" id="nine" class="buttons">9</button>
+            <button onclick="dis('0')" id="zero" class="buttons">0</button>
+            <button onclick="dis('+')" id="plus" class="buttons">+</button>
+            <button onclick="dis('-')" id="minus" class="buttons">-</button>
+            <button onclick="dis('x')" id="mul" class="buttons">x</button>
+            <button onclick="dis('÷')" id="divide" class="buttons">÷</button>
+            <button onclick="deleteAll('delete all')" id="clear">C</button>
+            <button onclick="solve()" id="solve">=</button>
+            <button onclick="dis('.')" id="decimal" class="buttons">.</button>
+        </div>
+        <script>
+            const ops = ['+', '-', 'x', '÷']
+            function dis(char) {
+                let DISPLAY = document.getElementById("screen").value;
+                if (ops.includes(char)) {
+                    DISPLAY += ` ${char} `
+                } else {DISPLAY += char;}
+                document.getElementById("screen").value = DISPLAY;
+            }
+            function solve() {
+                let expr = document.getElementById("screen").value;
+                expr = expr.replace(/x/g, "*").replace(/÷/g, "/").replace(/\s/g, "")
+                try {
+                    document.getElementById("screen").value = eval(expr)
+                } catch {
+                    document.getElementById("screen").style.color = "red"
+                    setTimeout(function() {
+                        document.getElementById("screen").style.color = "black"
+                    }, 1500)
+                }
+            }
+            function deleteAll(mode) {
+                document.getElementById("screen").value = ""
+            }
+            window.onload = function() {
+                document.addEventListener("keydown", (KEY) => {
+                    if (KEY.key === "1") {dis('1')}
+                    else if (KEY.key === "2") {dis('2')}
+                    else if (KEY.key === "3") {dis('3')}
+                    else if (KEY.key === "4") {dis('4')}
+                    else if (KEY.key === "5") {dis('5')}
+                    else if (KEY.key === "6") {dis('6')}
+                    else if (KEY.key === "7") {dis('7')}
+                    else if (KEY.key === "8") {dis('8')}
+                    else if (KEY.key === "9") {dis('9')}
+                    else if (KEY.key === "0") {dis('0')}
+                    else if (KEY.key === ".") {dis('.')}
+                    else if (KEY.key === "+") {dis('+')}
+                    else if (KEY.key === "-") {dis('-')}
+                    else if (KEY.key === "x") {dis('x')}
+                    else if (KEY.key === "/") {dis('÷')}
+                    else if (KEY.key === "Enter") {solve()}
+                    else if (KEY.key === "Backspace") {deleteAll()}
+                })
+            }
+        </script>
+    </body>
+</html>
